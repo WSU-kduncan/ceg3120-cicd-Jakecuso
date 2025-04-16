@@ -189,7 +189,7 @@ mine looked like this
 ---
 ## Dockerfile & Building Images
 
-![Dockerfile](img/dFile.png)
+![Dockerfile](img/dfile.png)
 
 ### Summary / Explanation of Instructions Written in the Dockerfile
 
