@@ -505,6 +505,9 @@ This file defines the CI/CD pipeline for building and pushing the Docker image t
   - The `Dockerfile` was updated to start with the official **`node:18-bullseye`** base image. This resolves the issue where the Docker image was previously built from a custom image and ensures compatibility with the Angular application.
 
 ### 2. Building for `amd64` Architecture:
+
+
+![fix](img/fix.png)
 - **What was fixed:**
   - The **`docker build`** command was updated to include the **`--platform linux/amd64`** flag. This ensures the image is built for the correct `amd64` architecture, which is required for compatibility across systems and aligns with project requirements.
 ### 6. Repo Migration:
