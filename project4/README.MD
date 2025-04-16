@@ -189,50 +189,48 @@ mine looked like this
 ---
 ## Dockerfile & Building Images
 
-![Dockerfile](img/DocFile.png)
+![Dockerfile](img/dFile.png)
 
 ### Summary / Explanation of Instructions Written in the Dockerfile
 
 Here’s a breakdown of the key instructions in your `Dockerfile`:
 
-1. ```
-    FROM node:18-bullseye
-    ```
+1. ```dockerfile
+   FROM node:18-bullseye
+   ```
    - This sets the base image to `node:18-bullseye`, which provides the necessary environment to run a Node.js-based application (Angular requires Node.js to run).
    
-2. ```
-    WORKDIR /usr/src/app
-    ```
-
+2. ```dockerfile
+   WORKDIR /usr/src/app
+   ```
    - This sets the working directory inside the container to `/usr/src/app`. Any subsequent commands will be run in this directory.
 
-3. ```
-    COPY angular-site/angular-bird /usr/src/app
-    ```
+3. ```dockerfile
+   COPY angular-site/angular-bird /usr/src/app
+   ```
    - This copies the contents of the `angular-site/angular-bird` directory from your local machine into the `/usr/src/app` directory inside the container.
 
-4. ```
-    RUN npm install -g @angular/cli
-    ```
+4. ```dockerfile
+   RUN npm install -g @angular/cli
+   ```
    - This installs the Angular CLI globally inside the container so that we can use Angular commands like `ng serve` to run the application.
 
-5. ```
-    RUN npm install
-    ```
+5. ```dockerfile
+   RUN npm install
+   ```
    - This installs the application’s dependencies (listed in the `package.json` file) inside the container.
 
-6. ```
-    EXPOSE 4200
-    ```
-     
+6. ```dockerfile
+   EXPOSE 4200
+   ```
    - This tells Docker that the container will use port `4200` for the Angular application. This is mainly for documentation purposes, as you’ll map the container port to the host machine port when running the container.
 
-7. ```
-    CMD ["ng", "serve", "--host", "0.0.0.0"]
-    ```
+7. ```dockerfile
+   CMD ["ng", "serve", "--host", "0.0.0.0"]
+   ```
    - This runs the Angular application when the container starts. It tells Angular to bind to all network interfaces (`0.0.0.0`), so it will be accessible from your browser on `localhost:4200`.
-
----
+   
+---------
 
 ### How to Build an Image from the Repository Dockerfile
 
@@ -367,3 +365,155 @@ Once you have authenticated with DockerHub via the CLI, you can push your Docker
 https://hub.docker.com/r/jakecuso/mancuso-ceg3120
 
 This link will give anyone access to My Docker image, and they can pull and run it by using the `docker pull` command.
+---
+# GitHub Actions Setup and Configuration
+
+## Configuring GitHub Repository Secrets
+
+### How to Create a Personal Access Token (PAT) for Authentication
+
+To allow GitHub Actions to authenticate with **DockerHub**, you need to create a **Personal Access Token (PAT)**.
+
+1. **Log in to DockerHub**:
+   - Go to [DockerHub](https://hub.docker.com/) and log in to your account.
+
+2. **Generate a Personal Access Token**:
+   - Click on your profile icon in the top right and navigate to **Account Settings**.
+   - In the left sidebar, select **Security**.
+   - Under the **Access Tokens** section, click **Create Token**.
+   - Name the token (e.g., `CI/CD Access`), set an expiration date if necessary, and click **Create**.
+   - **Copy the token** immediately as this is the only time you'll be able to view it.
+
+---
+
+### How to Set Repository Secrets
+
+Once you've created your **DockerHub PAT**, you need to add it to your GitHub repository as a secret for GitHub Actions.
+
+1. **Go to Your GitHub Repository**.
+2. **Navigate to Settings**:
+   - On your repository page, click on **Settings**.
+   - Scroll down to **Secrets** under the **Security** section.
+3. **Add Repository Secrets**:
+   - Click **New repository secret**.
+   - **Add the following secrets**:
+     - **`DOCKER_USERNAME`**: Your DockerHub **username**.
+     - **`DOCKER_TOKEN`**: The **Personal Access Token (PAT)** you generated in DockerHub.
+
+*These secrets will be used to authenticate the GitHub Actions workflow with DockerHub.*
+
+---
+
+### Secrets Used for This Project
+
+- **`DOCKER_USERNAME`**: Stores your **DockerHub username**.
+- **`DOCKER_TOKEN`**: Stores your **DockerHub Personal Access Token (PAT)**, which is required for authentication during Docker image build and push.
+
+These secrets are securely stored in GitHub and will be used by the workflow to log in to DockerHub and push the built image.
+
+---
+
+## CI with GitHub Actions
+
+### Summary of What the Workflow Does
+
+This GitHub Actions workflow automates the process of building a Docker image for the Angular application when changes are pushed to the `main` branch. It then pushes the built image to **DockerHub** so that it can be used or deployed from anywhere.
+
+### Explanation of Workflow Steps
+
+1. **Checkout Code**:
+   - The first step uses the `actions/checkout@v2` action to check out the latest code from the GitHub repository. This ensures that the workflow builds the most up-to-date version of the application.
+
+2. **Set up Docker Buildx**:
+   - The `docker/setup-buildx-action@v2` action sets up **Docker Buildx**, which allows us to build multi-platform images (in this case, `amd64`).
+
+3. **Cache Docker Layers**:
+   - The `actions/cache@v2` action caches Docker layers to speed up the build process for subsequent builds. This helps avoid rebuilding the entire Docker image from scratch each time.
+
+4. **Log in to DockerHub**:
+   - The `docker/login-action@v2` action uses the `DOCKER_USERNAME` and `DOCKER_TOKEN` secrets to authenticate with DockerHub. This step ensures that the workflow can push the Docker image to DockerHub.
+
+5. **Build and Push Docker Image**:
+   - The `docker build` command builds the Docker image from the `Dockerfile` in the repository.
+   - The `docker push` command pushes the built image to DockerHub under the `jakecuso/mancuso-ceg3120` repository.
+
+---
+
+### Values That Need to Be Updated
+
+If you're using this workflow in a different repository or with a different DockerHub account, you'll need to update the following:
+
+- **In the Workflow**:
+  - The `docker build` and `docker push` commands reference the image name `jakecuso/mancuso-ceg3120`. You should update this to match your DockerHub username and repository name if it's different.
+  
+    For example:
+    ```yaml
+    docker build --platform linux/amd64 -t yourusername/yourrepository .
+    docker push yourusername/yourrepository
+    ```
+
+- **In the Repository**:
+  - Make sure to update the **`DOCKER_USERNAME`** and **`DOCKER_TOKEN`** secrets with your **DockerHub credentials** in GitHub **Secrets**.
+  
+---
+
+### Link to the Workflow File
+
+You can find the workflow file [here](.github/workflows/ci.yml).
+
+This file defines the CI/CD pipeline for building and pushing the Docker image to DockerHub when changes are pushed to the `main` branch.
+
+---
+
+## Testing and Validating the Workflow
+
+### How to Test That Your Workflow Did Its Tasking
+
+1. **Push Changes**:
+   - To trigger the GitHub Actions workflow, push changes to the `main` branch in your GitHub repository.
+   
+2. **Check the Actions Tab**:
+   - Go to the **Actions** tab of your GitHub repository to see the status of the workflow.
+   - If everything is set up correctly, you should see the workflow run and complete successfully.
+
+3. **Verify Docker Image on DockerHub**:
+   - Once the workflow finishes, check your **DockerHub** account to verify that the new Docker image has been pushed.
+   - You should be able to see the `jakecuso/mancuso-ceg3120` image in your repository on DockerHub.
+
+### How to Verify That the Image in DockerHub Works When a Container Is Run
+
+1. **Pull the Docker Image**:
+   - On your local machine, run the following command to pull the image from DockerHub:
+   ```bash
+   docker pull jakecuso/mancuso-ceg3120
+   ```
+
+2. **Run the Docker Container**:
+   - After pulling the image, run it locally:
+   ```bash
+   docker run -p 4200:4200 jakecuso/mancuso-ceg3120
+   ```
+
+3. **Check the Angular Application**:
+   - Open your browser and navigate to `http://localhost:4200`. If everything is set up correctly, you should see the Angular application running inside the Docker container.
+
+---
+## Milestone 1 Fixes and Updates
+
+### 1. Starting with a Base Image:
+- **What was fixed:**
+  - The `Dockerfile` was updated to start with the official **`node:18-bullseye`** base image. This resolves the issue where the Docker image was previously built from a custom image and ensures compatibility with the Angular application.
+
+### 2. Building for `amd64` Architecture:
+- **What was fixed:**
+  - The **`docker build`** command was updated to include the **`--platform linux/amd64`** flag. This ensures the image is built for the correct `amd64` architecture, which is required for compatibility across systems and aligns with project requirements.
+### 6. Repo Migration:
+- **What was fixed:**
+  - The project was **moved/copied** into a **new repository**: [ceg3120-cicd-Jakecuso](https://github.com/WSU-kduncan/ceg3120-cicd-Jakecuso).
+  - All configurations from the previous repo were preserved and successfully migrated to this new repository.
+
+---
+## **Resources**
+###### For additional information, guides, and references related to Docker, GitHub Actions, Angular, and more, check out the [Resources](README-RESOURCES.md).
+
+---
