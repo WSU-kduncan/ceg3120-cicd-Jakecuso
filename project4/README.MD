@@ -294,6 +294,35 @@ Explanation:
    If the application is running, you should receive the HTML content of the Angular app.
 
 ---
+## 🛠️ Manual Setup Instructions (Without Dockerfile)
+
+To manually set up this project without using the Dockerfile, follow these steps:
+
+```bash
+# 1. Start from a clean Linux environment (e.g., Ubuntu 22.04 or Debian Bullseye)
+
+# 2. Install Node.js version 18
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# (Optional) Verify the installation
+node -v
+npm -v
+
+# 3. Clone the repository
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
+
+# 4. Install dependencies
+npm install
+
+# 5. Run the application
+npm start
+```
+
+*This replicates the environment used in the Dockerfile (based on `node:18`)*
+
+---
 
 ## Working with Your DockerHub Repository
 
@@ -514,6 +543,31 @@ This file defines the CI/CD pipeline for building and pushing the Docker image t
 - **What was fixed:**
   - The project was **moved/copied** into a **new repository**: [ceg3120-cicd-Jakecuso](https://github.com/WSU-kduncan/ceg3120-cicd-Jakecuso).
   - All configurations from the previous repo were preserved and successfully migrated to this new repository.
+---
+# Part 3 - Project Description & Diagram
+
+## Continuous Integration Project Overview
+
+### Goal of this Project
+
+The goal of this project is to set up a Continuous Integration (CI) pipeline using **GitHub Actions** to automatically build and push a **Docker image** whenever changes are made to the `main` branch of the GitHub repository. This ensures that the Docker image is always up-to-date with the latest code changes, and it is automatically pushed to **DockerHub** for easy deployment.
+
+### Tools Used in This Project and Their Roles
+
+1. **Docker**:
+   - **Role**: Docker is used to create and manage containers. In this project, it is used to package the Angular application and its dependencies into a Docker image, which can then be deployed and run in a container.
+   
+2. **GitHub Actions**:
+   - **Role**: GitHub Actions automates the build and deployment process. It listens for changes in the `main` branch and triggers the build process (i.e., it builds the Docker image and pushes it to DockerHub).
+   
+3. **DockerHub**:
+   - **Role**: DockerHub is used as a repository to store the Docker images built from this project. These images can be pulled and run in any environment that supports Docker.
+
+### Diagram of the CI Process
+
+The following diagram illustrates the **Continuous Integration (CI)** process set up in this project:
+
+![chart](img/chart.png)
 
 ---
 ## **Resources**
