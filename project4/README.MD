@@ -531,7 +531,8 @@ This file defines the CI/CD pipeline for building and pushing the Docker image t
 
 ### 1. Starting with a Base Image:
 - **What was fixed:**
-  - The `Dockerfile` was updated to start with the official **`node:18-bullseye`** base image. This resolves the issue where the Docker image was previously built from a custom image and ensures compatibility with the Angular application.
+
+  The Dockerfile was updated to use the official node:18-bullseye base image, which ensures compatibility with the Angular application and resolves issues from a previously custom base image. Additionally, I added a section in the README to explain how to manually set up the Angular project without using Docker. This provides an alternative setup for users who prefer to run the application locally without Docker containers.
 
 ### 2. Building for `amd64` Architecture:
 
