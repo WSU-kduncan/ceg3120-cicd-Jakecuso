@@ -26,7 +26,7 @@ jobs:
     - name: Build and push Docker image for Project 5
       uses: docker/build-push-action@v2
       with:
-        context: ./project4  # Build the Docker image from the project4 directory
+        context: ./project5  # Build the Docker image from the project4 directory
         push: true
         tags: |
           user/repository:project5-${{ github.ref_name }}  # Tag with version tag (v1.0.0)
