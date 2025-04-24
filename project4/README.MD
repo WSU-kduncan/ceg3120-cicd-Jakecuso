@@ -234,7 +234,7 @@ npm start
 
 ---
 
-## Working with Your DockerHub Repository
+## Working with DockerHub Repository
 
 ### How to Create a Public Repo in DockerHub
 
@@ -263,6 +263,7 @@ npm start
    - Provide a **name** for the token (e.g., `CI/CD Auth`).
    - Set an **expiration date** if necessary.
    - **Copy the token** once it's created. **This is the only time you will see the token**.
+   - *note make one with `read/write` as I fould out later with CD.*
 
 
 ---
@@ -309,21 +310,6 @@ This link will give anyone access to My Docker image, and they can pull and run 
 
 ## Configuring GitHub Repository Secrets
 
-### How to Create a Personal Access Token (PAT) for Authentication
-
-To allow GitHub Actions to authenticate with **DockerHub**, you need to create a **Personal Access Token (PAT)**.
-
-1. **Log in to DockerHub**:
-   - Go to [DockerHub](https://hub.docker.com/) and log in to your account.
-
-2. **Generate a Personal Access Token**:
-   - Click on your profile icon in the top right and navigate to **Account Settings**.
-   - In the left sidebar, select **Security**.
-   - Under the **Access Tokens** section, click **Create Token**.
-   - Name the token (e.g., `CI/CD Access`), set an expiration date if necessary, and click **Create**.
-   - **Copy the token** immediately as this is the only time you'll be able to view it.
-
----
 
 ### How to Set Repository Secrets
 
