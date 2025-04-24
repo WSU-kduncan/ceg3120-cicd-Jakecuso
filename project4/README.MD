@@ -310,29 +310,28 @@ This link will give anyone access to My Docker image, and they can pull and run 
 
 ## Configuring GitHub Repository Secrets
 
-
 ### How to Set Repository Secrets
 
-Once you've created your **DockerHub PAT**, you need to add it to your GitHub repository as a secret for GitHub Actions.
+Once I created my **DockerHub PAT**, I need to add it to my GitHub repository as a secret for GitHub Actions.
 
-1. **Go to Your GitHub Repository**.
+1. **Go to my GitHub Repository**.
 2. **Navigate to Settings**:
-   - On your repository page, click on **Settings**.
+   - On my repository page, I clicked on **Settings**.
    - Scroll down to **Secrets** under the **Security** section.
 3. **Add Repository Secrets**:
    - Click **New repository secret**.
    - **Add the following secrets**:
-     - **`DOCKER_USERNAME`**: Your DockerHub **username**.
-     - **`DOCKER_TOKEN`**: The **Personal Access Token (PAT)** you generated in DockerHub.
+     - **`DOCKER_USERNAME`**: My DockerHub **username**.
+     - **`DOCKER_TOKEN`**: The **Personal Access Token (PAT)** I generated in DockerHub.
 
 *These secrets will be used to authenticate the GitHub Actions workflow with DockerHub.*
 
 ---
 
-### Secrets Used for This Project
+### Secrets Used For This Part Of My Project
 
-- **`DOCKER_USERNAME`**: Stores your **DockerHub username**.
-- **`DOCKER_TOKEN`**: Stores your **DockerHub Personal Access Token (PAT)**, which is required for authentication during Docker image build and push.
+- **`DOCKER_USERNAME`**: Stores my **DockerHub username**.
+- **`DOCKER_TOKEN`**: Stores my **DockerHub Personal Access Token (PAT)**, which is required for authentication during Docker image build and push.
 
 These secrets are securely stored in GitHub and will be used by the workflow to log in to DockerHub and push the built image.
 
@@ -384,7 +383,8 @@ If you're using this workflow in a different repository or with a different Dock
 
 ### Link to the Workflow File
 
-You can find the workflow file [here](.github/workflows/ci.yml).
+You can find the workflow file [here](.github/workflows/ci.yml). 
+*note an updated version of this will be in the root of my repo for project5*
 
 This file defines the CI/CD pipeline for building and pushing the Docker image to DockerHub when changes are pushed to the `main` branch.
 
