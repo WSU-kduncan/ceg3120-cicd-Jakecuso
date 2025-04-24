@@ -67,16 +67,20 @@ docker run -p 4200:4200 jakecuso/mancuso-ceg3120
 
 ### Commands Needed Internal to the Container to Get Additional Dependencies
 
-Once the container is running, if any additional dependencies are needed inside the container, you can access the container and install them. 
+Once the container is running, if any additional dependencies are needed inside the container, I can access the container and install them. 
 
-To do this, follow these steps:
+To do this, I did these steps:
 
 1. **Access the running container**:
-   - Find the container ID by running:
+   - Found the container ID by running:
      ```
      docker ps
      ```
-   - Once you have the container ID, you can access it using the following command:
+     ![Id](img/ContID.png)
+      *the container ID in my case is `870b41ed210f`*
+
+   
+   - Once I had the container ID, I can access it using the following command:
      ```
      docker exec -it <container_id> bash
      ```
