@@ -20,23 +20,23 @@
      🥳*You should see the Docker version installed.*🥳
 
 
-## 2. How to Confirm Docker is Installed and Your System Can Successfully Run Containers
+## 2. How I Confirmed That Docker Was Installed & Make Sure My System Can Successfully Run Containers
 
-Once Docker is installed, you can confirm that Docker is working correctly by running the following commands:
+Once Docker Was installed, I can confirm that Docker is working correctly by running the following commands:
 
 ### Check Docker Version:
 Open a terminal and run:
  ```bash
  docker --version
  ```
- This will return the version of Docker installed, confirming it is set up.
+ This will return the version of Docker  I installed, confirming it is set up.
 
 ### Run a Test Docker Container:
-To verify Docker is working and can run containers, run the following command:
+To verify Docker is working and can run containers, I can run the following command:
  ```bash
   docker run hello-world
    ```
-   This will pull a test image (`hello-world`) from DockerHub and run it. If everything is set up correctly, you’ll see a success message indicating that Docker is installed and running properly.
+   This will pull a test image (`hello-world`) from DockerHub and run it. If everything is set up correctly, I will see a success message indicating that Docker is installed and running properly.
 
 ### Check Running Containers:
 You can also check for running containers using:
