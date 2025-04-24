@@ -19,69 +19,8 @@
      ```
      🥳*You should see the Docker version installed.*🥳
 
-### For Windows:
-1. **Install WSL2 (Windows Subsystem for Linux)**:
-   Docker Desktop requires WSL2 to run on Windows. Follow the instructions on the [official Microsoft page](https://docs.microsoft.com/en-us/windows/wsl/install) to install WSL2.
-   
-2. **Download Docker Desktop**:
-   - Visit the [Docker Desktop download page](https://www.docker.com/products/docker-desktop) and download the Windows version.
 
-3. **Install Docker**:
-   - Run the installer and follow the on-screen instructions.
-   - Docker Desktop will configure WSL2 for you during the installation.
-
-4. **Start Docker**:
-   - Once installed, open Docker from the Start menu. It will run in the background.
-
-5. **Verify Installation**:
-   - Open PowerShell or Command Prompt and run:
-     ```bash
-     docker --version
-     ```
-     You should see the Docker version installed.
-
-### For Linux (Ubuntu/Debian-based distros):
-1. **Install Docker**:
-   - Run the following commands to install Docker:
-     ```bash
-     sudo apt-get update
-     sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
-     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-     sudo apt-get update
-     sudo apt-get install docker-ce
-     ```
-
-2. **Start Docker**:
-   - Enable and start Docker with:
-     ```bash
-     sudo systemctl enable docker
-     sudo systemctl start docker
-     ```
-
-3. **Verify Installation**:
-   - Check the Docker version by running:
-     ```bash
-     docker --version
-     ```
-
-## 2. Additional Dependencies Based on Your OS
-
-### For Windows:
-- **WSL2 (Windows Subsystem for Linux)**:
-  - If you're using Docker on Windows, WSL2 is required. This allows Docker to run Linux containers on Windows.
-  - Follow the WSL2 installation instructions [here](https://docs.microsoft.com/en-us/windows/wsl/install) if you haven't already set it up.
-
-### For macOS:
-- macOS does not require additional dependencies beyond Docker Desktop, as it uses native virtualization to run Docker containers.
-
-### For Linux:
-- Most Linux distributions don’t require additional dependencies beyond Docker itself, but ensure your user is added to the Docker group to run Docker commands without `sudo`:
-  ```bash
-  sudo usermod -aG docker $USER
-   ```
-
-## 3. How to Confirm Docker is Installed and Your System Can Successfully Run Containers
+## 2. How to Confirm Docker is Installed and Your System Can Successfully Run Containers
 
 Once Docker is installed, you can confirm that Docker is working correctly by running the following commands:
 
