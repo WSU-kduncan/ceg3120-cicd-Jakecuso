@@ -55,6 +55,9 @@
   - Official guide to testing Angular applications, including unit tests and integration tests.
 
 ---
+## ReadME.md Formatting 
+This projects ReadMe Files & the #dockerfile comments wwhere as developed with insights from ChatGPT (OpenAI, 2022 Training Data) and my personal LLM assistant -v2026(Local deployment only / hosted on My MAC Cluster called `ClusterFawk`).
+https://chat.openai.com/
 
 ## Useful Links
 
@@ -66,5 +69,5 @@
 
 ---
 
-This page provides important resources related to Docker, GitHub Actions, Angular, DockerHub, and testing for this project. Make sure to consult these resources for further learning and troubleshooting.
+This page provides important resources related to my project Docker, GitHub Actions, Angular, DockerHub, and testing for this project. 
 
