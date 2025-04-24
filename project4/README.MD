@@ -2,7 +2,7 @@
 
 ## 1. How to Install Docker for Your OS
 
-### For macOS: 
+### For macOS: (my OS)
 1. **Download Docker Desktop**:
    - Visit the [Docker Desktop download page](https://www.docker.com/products/docker-desktop) and download the version for macOS.
    
@@ -77,12 +77,13 @@ To do this, I did these steps:
      docker ps
      ```
      ![Id](img/ContID.png)
+
       *the container ID in my case is `870b41ed210f`*
 
    
    - Once I had the container ID, I can access it using the following command:
      ```
-     docker exec -it <container_id> bash
+     docker exec -it 870b41ed210f bash
      ```
      Replace `<container_id>` with the actual ID of your running container.
 
@@ -94,13 +95,13 @@ To do this, I did these steps:
 
 ### Commands Needed Internal to the Container to Run the Application
 
-To start the Angular application inside the container, run the following command inside the container (if it hasn't already been started):
+To start the Angular application inside the container, I need to run the following command inside the container (if it hasn't already been started):
 
 ```
 ng serve --host 0.0.0.0
 ```
 
-- `--host 0.0.0.0`: This option tells Angular to listen on all available network interfaces, making the application accessible outside the container (e.g., from your browser on `localhost:4200`).
+- `--host 0.0.0.0`: This option tells Angular to listen on all available network interfaces, making the application accessible outside the container (e.g., from my browser on `localhost:4200`).
 
 ### How to Verify That the Container is Successfully Serving the Angular Application
 
@@ -110,25 +111,28 @@ ng serve --host 0.0.0.0
    ** Angular Live Development Server is listening on 0.0.0.0:4200, open your browser on http://localhost:4200/ **
    ```
    
-2. You can also check if the application is running on port `4200` inside the container using:
+2. I can also check if the application is running on port `4200` inside the container using:
    ```
    netstat -tuln | grep 4200
    ```
 
 #### **Validate from Host Side:**
-1. On your local machine (host), open a web browser and navigate to:
+1. On my local machine (host), I can open a web browser and navigate to:
    ```
    http://localhost:4200
    ```
-   If the Angular app is running correctly, you should see the application’s front-end in your browser.
+   If the Angular app is running correctly, I should see the application’s front-end in my browser.
 
-2. You can also use `curl` or `wget` to verify the container is serving the app:
+2. I can also use `curl` or `wget` to verify the container is serving the app:
    ```
    curl http://localhost:4200
    ```
-   If the application is running, you should receive the HTML content of the Angular app.
-mine looked like this 
 ![localhostimg](img/bird.png)
+   
+   If the application is running, you should receive the HTML content of the Angular app.
+Mine looked like this
+![termgen](img/BundleGen.png)
+
 
 ---
 ## Dockerfile & Building Images
@@ -137,7 +141,7 @@ mine looked like this
 
 ### Summary / Explanation of Instructions Written in the Dockerfile
 
-Here’s a breakdown of the key instructions in your `Dockerfile`:
+Here’s a breakdown of the key instructions in my `Dockerfile`:
 
 1. ```dockerfile
    FROM node:18-bullseye
@@ -152,7 +156,7 @@ Here’s a breakdown of the key instructions in your `Dockerfile`:
 3. ```dockerfile
    COPY angular-site/angular-bird /usr/src/app
    ```
-   - This copies the contents of the `angular-site/angular-bird` directory from your local machine into the `/usr/src/app` directory inside the container.
+   - This copies the contents of the `angular-site/angular-bird` directory from my local machine into the `/usr/src/app` directory inside the container.
 
 4. ```dockerfile
    RUN npm install -g @angular/cli
@@ -167,12 +171,12 @@ Here’s a breakdown of the key instructions in your `Dockerfile`:
 6. ```dockerfile
    EXPOSE 4200
    ```
-   - This tells Docker that the container will use port `4200` for the Angular application. This is mainly for documentation purposes, as you’ll map the container port to the host machine port when running the container.
+   - This tells Docker that the container will use port `4200` for the Angular application. This is mainly for documentation purposes, as I will map the container port to the host machine port when running the container.
 
 7. ```dockerfile
    CMD ["ng", "serve", "--host", "0.0.0.0"]
    ```
-   - This runs the Angular application when the container starts. It tells Angular to bind to all network interfaces (`0.0.0.0`), so it will be accessible from your browser on `localhost:4200`.
+   - This runs the Angular application when the container starts. It tells Angular to bind to all network interfaces (`0.0.0.0`), so it will be accessible from my browser on `localhost:4200`.
    
 ---------
 
