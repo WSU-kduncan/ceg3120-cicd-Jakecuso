@@ -392,14 +392,18 @@ This file defines the CI/CD pipeline for building and pushing the Docker image t
 
 ## Testing and Validating the Workflow
 
-### How to Test That Your Workflow Did Its Tasking
+### How to Test That My Workflow Did Its Tasking
 
 1. **Push Changes**:
-   - To trigger the GitHub Actions workflow, push changes to the `main` branch in your GitHub repository.
+   - To trigger the GitHub Actions workflow, I pushed changes to the `main` branch in My GitHub repository.
    
 2. **Check the Actions Tab**:
-   - Go to the **Actions** tab of your GitHub repository to see the status of the workflow.
-   - If everything is set up correctly, you should see the workflow run and complete successfully.
+   - I can go to the **Actions** tab of my GitHub repository to see the status of the workflow.
+   - If I did everything is set up correctly, I should see the workflow run and complete successfully.
+
+   ![actions](img/act.png)
+   
+   *here I can see after I fixed my read me and pushed to github the actions was triggered*
 
 3. **Verify Docker Image on DockerHub**:
    - Once the workflow finishes, check your **DockerHub** account to verify that the new Docker image has been pushed.
