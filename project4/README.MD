@@ -402,8 +402,8 @@ This file defines the CI/CD pipeline for building and pushing the Docker image t
    - If I did everything is set up correctly, I should see the workflow run and complete successfully.
 
    ![actions](img/act.png)
-   
-   *here I can see after I fixed my read me and pushed to github the actions was triggered*
+
+   *here I can see after I fixed my read me and pushed to github the actions was triggered* `the ✅ means it was sucessful`
 
 3. **Verify Docker Image on DockerHub**:
    - Once the workflow finishes, check your **DockerHub** account to verify that the new Docker image has been pushed.
