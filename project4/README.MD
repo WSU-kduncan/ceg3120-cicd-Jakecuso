@@ -39,11 +39,11 @@ To verify Docker is working and can run containers, I can run the following comm
    This will pull a test image (`hello-world`) from DockerHub and run it. If everything is set up correctly, I will see a success message indicating that Docker is installed and running properly.
 
 ### Check Running Containers:
-You can also check for running containers using:
+We can also check for running containers using:
 ```bash
  docker ps
  ```
-This will list all the currently running containers. If you see your `hello-world` container, that means Docker is working fine.
+This will list all the currently running containers. If the `hello-world` container that I made shows up, that means Docker is working fine.
 
 ---
 
@@ -53,16 +53,17 @@ This will list all the currently running containers. If you see your `hello-worl
 
 ### How to Run a Container to Test the Angular Application
 
-To run the Docker container with your Angular application, you can use the following command:
+To run the Docker container with My Angular application, I will use the following command:
 
 ```
 docker run -p 4200:4200 jakecuso/mancuso-ceg3120
 ```
-*note dockersuername/dockerhubrepo*
+
 ### Explanation of Flags / Arguments Used
 
-- `-p 4200:4200`: This flag maps the container's port `4200` (which is the default port for Angular applications) to your local machine's port `4200`. This means that the Angular app running inside the container will be accessible through your browser at `http://localhost:4200`.
-- `jakecuso/mancuso-ceg3120`: This is the name of the Docker image I built and pushed to DockerHub. Replace `jakecuso/mancuso-ceg3120` with the name of your Docker image if it's different.
+- `-p 4200:4200`: This flag maps the container's port `4200` (which is the default port for Angular applications) to my local machine's port `4200`. This means that the Angular app running inside the container will be accessible through my browser at `http://localhost:4200`.
+- `jakecuso/mancuso-ceg3120`: This is the name of my Docker image I built and pushed to DockerHub. 
+- Replace `jakecuso/mancuso-ceg3120` with the name of your Docker image if you are following along.
 
 ### Commands Needed Internal to the Container to Get Additional Dependencies
 
