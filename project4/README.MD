@@ -190,7 +190,10 @@ docker build -t jakecuso/mancuso-ceg3120 .
 
 Explanation:
 - `docker build`: Tells Docker to build an image from the current directory (which contains the `Dockerfile`).
-- `-t jakecuso/mancuso-ceg3120`: Tags the image with a name (`jakecuso/mancuso-ceg3120`). Replace this with your preferred image name if different.
+- `-t jakecuso/mancuso-ceg3120`: Tags the image with a name (`jakecuso/mancuso-ceg3120`).
+
+*Replace this with your preferred image name if different.*
+
 - `.`: Refers to the current directory as the context for the build.
 
 Once the build completes, you’ll see a confirmation message like mine:
@@ -199,47 +202,6 @@ Successfully built <image-id>
 Successfully tagged jakecuso/mancuso-ceg3120:latest
 ```
 
----
-
-### How to Run a Container That Will Serve the Angular Application from the Image Built by the Dockerfile
-
-To run the Angular application inside the container, use the following command:
-
-```
-docker run -p 4200:4200 jakecuso/mancuso-ceg3120
-```
-
-Explanation:
-- `-p 4200:4200`: This maps port `4200` on your host machine to port `4200` inside the container, allowing you to access the Angular app at `http://localhost:4200`.
-- `jakecuso/mancuso-ceg3120`: The name of the Docker image you built.
-
----
-
-### How to Verify That the Container is Successfully Serving the Angular Application
-
-#### **Validate from Container Side:**
-1. After starting the container, check the logs to ensure Angular is running. You should see output similar to:
-   ```
-   ** Angular Live Development Server is listening on 0.0.0.0:4200, open your browser on http://localhost:4200/ **
-   ```
-
-2. You can also verify that the Angular app is running on port `4200` inside the container using:
-   ```
-   netstat -tuln | grep 4200
-   ```
-
-#### **Validate from Host Side:**
-1. On your local machine (host), open a web browser and navigate to:
-   ```
-   http://localhost:4200
-   ```
-   If the Angular app is running correctly, you should see the front-end of the application in your browser.
-
-2. You can also use `curl` or `wget` to verify the container is serving the app:
-   ```
-   curl http://localhost:4200
-   ```
-   If the application is running, you should receive the HTML content of the Angular app.
 
 ---
 ## 🛠️ Manual Setup Instructions (Without Dockerfile)
