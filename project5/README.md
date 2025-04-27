@@ -6,15 +6,17 @@ This document provides the steps for **generating tags**, **viewing tags**, and 
 
 ## 1) **Generating Tags**
 
-In Git, tags are used to mark specific points in your project’s history. They are commonly used to mark release versions.
+In Git, tags are used to mark specific points in the project’s history. They are commonly used to mark release versions.
 
 To **generate a tag** in Git, use the following command:
 
 ```bash
 git tag -a <tag_name> -m "<message>"
-<tag_name>: The name of the tag, typically following semantic versioning, e.g., v1.0.0.
-<message>: A short description of the tag (similar to a commit message).
 ```
+<t-ag_name->: The name of the tag, typically following semantic versioning, e.g., v1.0.0.
+
+<-message->: A short description of the tag (similar to a commit message).
+
 Example:
 ```bash
 git tag -a v1.0.0 -m "First release for Project 5"
@@ -23,7 +25,7 @@ This will create an annotated tag with the name v1.0.0 and a message "First rele
 
 ## 2) How to See Tags in a Git Repository?
 
-To see all the tags in your Git repository, use the following command:
+To see all the tags in your Git repository, I'd use the following command:
 ```bash
 git tag
 ```
@@ -35,12 +37,12 @@ Example:
 ```bash
 git show v1.0.0
 ```
-## 3) How to Generate a Tag in a Git Repository?
+## 3) How To Generate a Tag in a Git Repository?
 
-To create a new tag in your repository:
+To create a new tag in the repository:
 
-Navigate to your repository on your local machine.
-Run the following command to create a new tag:
+Navigate to my repository on my local machine. I 
+Ran the following command to create a new tag:
 ```bash
 git tag -a v1.0.1 -m "Tag for version 1.0.1"
 ```
@@ -59,22 +61,22 @@ Example:
 ```bash
 git push origin v1.0.1
 ```
-If you want to push all tags at once:
+If I want to push all tags at once:
 ```
 git push --tags
 ```
-This will push all tags that are available in your local repository to GitHub.
+This will push all tags that are available in my local repository to GitHub.
 
 ---
 
 
 # Semantic Versioning Container Images with GitHub Actions
 
-This document explains how the **GitHub Actions workflow** for **semantic versioning** of container images works. The workflow is responsible for automating the process of building, tagging, and pushing Docker images to **DockerHub** when new version tags are pushed to the repository.
+This document will explain how the **GitHub Actions workflow** for **semantic versioning** of container images works. The workflow is responsible for automating the process of building, tagging, and pushing Docker images to **DockerHub** when new version tags are pushed to the repository.
 
 ---
 
-## Summary of What  Workflow Does and When It Does It
+## Summary of What a Workflow Does and When It Does It
 
 The **workflow** is designed to build and push **Docker images** to **DockerHub** whenever a **version tag** is pushed to the GitHub repository. It uses **semantic versioning** (e.g., `v1.0.0`, `v1.1.0`) to tag the Docker images. The workflow only runs when a tag is pushed to GitHub that follows the pattern `v*.*.*`.
 
@@ -129,7 +131,7 @@ The **workflow** is designed to build and push **Docker images** to **DockerHub*
 
 ## Explanation / Highlight of Values That Need Updated If Used in a Different Repository
 
-If you are using this workflow in a **different repository**, the following values need to be updated:
+If I was to use this workflow in a **different repository**, the following values need to be updated:
 
 1. **DOCKER_USERNAME**:
    - The DockerHub username must be updated in **GitHub Secrets**. This username will be used for both the login and the tag naming.
@@ -144,27 +146,12 @@ If you are using this workflow in a **different repository**, the following valu
    - Make sure that the **DockerHub token** has both **read and write** permissions.
 
 4. **Build Context**:
-   - If the Dockerfile or the project folder is in a different location, change the `context` value. For example, if you want to build from `project4`, update the context to `./project4`.
+   - If the Dockerfile or the project folder is in a different location, change the `context` value. For example, if I want to build from `project4`, update the context to `./project4`. 
+   
+   *In my case I have it in both (project 4 & 5 to show my progress) but my most updated workflow is in project 5 so im using that*
 
 ---
 
-## Changes in Workflow
-
-If you are using this workflow in a different repository, ensure that:
-
-1. The **DockerHub username** and **repository name** are correct.
-2. The **build context** points to the correct directory that contains the **Dockerfile** and the necessary files.
-3. The **DockerHub token** has the proper permissions (read and write).
-4. **Secrets** are correctly added and accessible in GitHub Secrets for authentication.
-
----
-
-## Changes in Repository
-
-1. Ensure that **DockerHub credentials** are available in **GitHub Secrets** for authentication (`DOCKER_USERNAME`, `DOCKER_TOKEN`, `DOCKER_HUB_REPO`).
-2. Ensure the repository has a **valid Dockerfile** and that the repository structure supports building the Docker image correctly (i.e., the necessary files and context are in place).
-
----
 
 ## Link to Workflow File in my GitHub Repository
 
@@ -178,11 +165,11 @@ If you are using this workflow in a different repository, ensure that:
 
 # Testing & Validating
 
-This section describes how to test and validate that your GitHub Actions workflow for **building and pushing Docker images** works as expected, and how to verify that the image in **DockerHub** works when run in a container.
+This section describes how to test and validate that my GitHub Actions workflow for **building and pushing Docker images** works as expected, and how to verify that the image in **DockerHub** works when run in a container.
 
 ---
 
-## How to Test That Your Workflow Did Its Tasking
+## How I Can Test That My Workflow Did Its Tasking
 
 1. **Verify Workflow Run**:
    - Go to the **GitHub repository** and navigate to the **Actions** tab.
@@ -199,7 +186,7 @@ This section describes how to test and validate that your GitHub Actions workflo
 
 ---
 
-## How to Verify That the Image in DockerHub Works When a Container Is Run Using the Image
+## How to Verify That the Image in DockerHub Works When a Container Is Run Using the Image (Steps & Instrutions)
 
 Once the Docker image has been pushed to DockerHub, it's important to verify that it works as expected by running a container.
 
@@ -236,8 +223,8 @@ Once the Docker image has been pushed to DockerHub, it's important to verify tha
 
 ## Part 1 Conclusion
 
-By following these steps, you can **test the workflow** that builds and pushes the Docker image and **validate the functionality** of the image by running it as a container. This ensures that your **CI/CD pipeline** works correctly and that the image you deploy in DockerHub works as intended when run in any environment.
+By following these steps, I can **test the workflow** that builds and pushes the Docker image and **validate the functionality** of the image by running it as a container. This ensures that my **CI/CD pipeline** works correctly and that the image I deploy in DockerHub works as intended when run in any environment.
 
 This document explains how my **CI/CD workflow** handles **semantic versioning** for Docker images and automates the process of building and pushing them to DockerHub. The workflow will be triggered by a tag push and will apply the appropriate version tags to my Docker image, ensuring a smooth **continuous deployment** process.
 
-Tags are an essential part of version control in Git and are used extensively in **Continuous Deployment (CD)** workflows. By generating, viewing, and pushing tags, you can trigger automated processes and keep track of versions in your project.
+Tags are an essential part of version control in Git and are used extensively in **Continuous Deployment (CD)** workflows. By generating, viewing, and pushing tags, I can trigger automated processes and keep track of versions in my project. 
