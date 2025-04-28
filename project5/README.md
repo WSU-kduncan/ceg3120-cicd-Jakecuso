@@ -450,6 +450,7 @@ These steps manually:
 - Start a fresh container serving the newest application version.
 
 This manual process is automated through the `refresh_container.sh` script during webhook-triggered automatic deployment.
+
 ---
 ## **(2.4)** Crafting the Bash Script for Deployment Refresh
 
@@ -462,6 +463,13 @@ Created a folder called `deployment` to store all deployment-related scripts and
 
 Created a bash script named `refresh_container.sh` located in the `deployment` folder.
 
+Made the script executable using the following command:
+- chmod +x refresh_container.sh
+
+**Script Made Executable Screenshot:**  
+![Script Executable](images/ChmodEXC.png)
+
+
 This script does the following:
 - Stops the existing container (if it is running)
 - Removes the existing container
@@ -469,23 +477,22 @@ This script does the following:
 - Runs a new container process with the newly pulled image
 
 Commands inside the script:
-- sudo docker stop angular_app
-- sudo docker rm angular_app
-- sudo docker pull jakecuso/mancuso-ceg3120:latest
-- sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
-
+```
+sudo docker stop angular_app
+```
+```
+sudo docker rm angular_app
+```
+```
+sudo docker pull jakecuso/mancuso-ceg3120:latest
+```
+```
+sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
+```
 **Refresh Script Screenshot (Script Content):**  
 ![Refresh Script Created](images/Refresh.png)
 
----
-
-Made the script executable using the following command:
-- chmod +x refresh_container.sh
-
-**Script Made Executable Screenshot:**  
-![Script Executable](images/ChmodEXC.png)
-
----
+### How to Test that the Script Successfully Performs Its Taskings
 
 Tested the script manually by running it:
 - ./refresh_container.sh
@@ -508,7 +515,30 @@ Since my EC2 user did not have direct access to the Docker daemon, I needed to a
 **Screenshot Showing Script with Sudo Commands:**  
 ![Refresh Script with Sudo](images/refreshsudo.png)
 
+After creating the `refresh_container.sh` script, I tested its functionality by manually executing the script on the EC2 instance:
+
+- ./refresh_container.sh
+
+
+**Verification steps included:**
+- Running `sudo docker ps` to confirm the container was running.
+![dockerps](images/runcheck.png)
+- Running `curl localhost:4200` from the EC2 instance to confirm the application was being served.
+![curl](images/curl.png)
+- Accessing the application from my laptop via `http://<EC2-Public-IP>:4200`.
+![birb](images/safari.png)
+Each step worked without manual intervention, confirming the script automated the refresh task properly.
+
+
+### Link to Bash Script in Repository
+
+The `refresh_container.sh` script is located in the `/deployment` folder of my GitHub repository:
+
+- [refresh_container.sh](https://github.com/WSU-kduncan/ceg3120-cicd-Jakecuso/blob/main/project5/deployment/refresh_container.sh)
+
+ 
 ---
+
 ## (2.5) Installing and Setting Up Webhook on EC2
 
 Installed the webhook server on the EC2 instance by first updating the package lists and then installing webhook.
