@@ -305,3 +305,61 @@ Started the container and mapped port 4200:
 ![Container Running Check](images/runcheck.png)
 
 ---
+## **(2.4)** Crafting the Bash Script for Deployment Refresh
+
+Created a folder called `deployment` to store all deployment-related scripts and configuration.
+
+**Created Deployment Folder Screenshot:**  
+![Deployment Folder Created](images/mkdirDEPLOYMENT.png)
+
+---
+
+Created a bash script named `refresh_container.sh` located in the `deployment` folder.
+
+This script does the following:
+- Stops the existing container (if it is running)
+- Removes the existing container
+- Pulls the latest tagged image from DockerHub
+- Runs a new container process with the newly pulled image
+
+Commands inside the script:
+- sudo docker stop angular_app
+- sudo docker rm angular_app
+- sudo docker pull jakecuso/mancuso-ceg3120:latest
+- sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
+
+**Refresh Script Screenshot (Script Content):**  
+![Refresh Script Created](images/Refresh.png)
+
+---
+
+Made the script executable using the following command:
+- chmod +x refresh_container.sh
+
+**Script Made Executable Screenshot:**  
+![Script Executable](images/ChmodEXC.png)
+
+---
+
+Tested the script manually by running it:
+- ./refresh_container.sh
+
+Results:
+- Stopped the container (if running)
+- Removed the container (if exists)
+- Pulled the latest image from DockerHub
+- Ran a new container successfully
+
+**Manual Script Run Output Screenshot:**  
+![Manual Script Run Output](images/runningsh.png)
+
+---
+
+## Notes on Permissions
+
+Since my EC2 user did not have direct access to the Docker daemon, I needed to add `sudo` in front of every Docker command inside `refresh_container.sh`.
+
+**Screenshot Showing Script with Sudo Commands:**  
+![Refresh Script with Sudo](images/refreshsudo.png)
+
+---
