@@ -71,6 +71,27 @@
 This projects ReadMe Files & the #dockerfile comments wwhere as developed with insights from ChatGPT (OpenAI, 2022 Training Data) and my personal LLM assistant -v2026(Local deployment only / hosted on My MAC Cluster called `ClusterFawk`).
 https://chat.openai.com/
 
+## LLM Prompt Engineering
+
+This project also incorporates techniques from LLM (Large Language Model) Prompt Engineering to optimize AI-assisted content generation, such as:
+
+- **Guided Outputs**: Carefully designed prompts were used to generate consistent, structured suggestions (e.g., Dockerfile comments, README outlines, troubleshooting steps).
+- **Multi-Turn Conversations**: Leveraged iterative prompting to refine complex instructions, ensuring each AI output built logically on prior answers.
+- **Context-Aware Prompts**: Included project-specific context (Docker setup, NAT Gateway usage, webhook configurations) within prompts to improve relevance and accuracy.
+- **Post-Processing**: AI-generated outputs were manually reviewed, cleaned, and formatted to match professional documentation standards.
+
+> The prompt design focused on maximizing clarity, relevance, and actionable detail in all generated content.
+
+---
+
+### LLMs Used
+
+- **ChatGPT (OpenAI, 2022 training data)**
+- **Personal LLM Assistant v2026 (hosted local on ClusterFawk)**
+
+---
+
+
 ## Useful Links
 
 - [GitHub Actions Marketplace](https://github.com/marketplace?type=actions)
