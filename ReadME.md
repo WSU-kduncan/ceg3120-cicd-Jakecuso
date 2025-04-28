@@ -37,4 +37,4 @@ This repository implements a full Continuous Integration (CI) and Continuous Dep
 This project demonstrates how code changes made by a developer can automatically trigger container rebuilds, DockerHub updates, webhook payloads, and container refreshes on a production server — achieving a fully automated DevOps workflow for an Angular application.
 
 ## **Resources**
-###### For additional information, guides, and references related to Docker, GitHub Actions, Angular, and more, check out the [Resources](README-RESOURCES.md). That I used to make this Project :)
+###### For additional information, guides, and references related to Docker, GitHub Actions, Angular, and more, check out the [Resources](https://github.com/WSU-kduncan/ceg3120-cicd-Jakecuso/blob/main/project4/README-RESOURCES.md). That I used to make this Project :)
