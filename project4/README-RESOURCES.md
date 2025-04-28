@@ -74,12 +74,4 @@ https://chat.openai.com/
 ## Useful Links
 
 - [GitHub Actions Marketplace](https://github.com/marketplace?type=actions)
-  - A marketplace for GitHub Actions that can be integrated into workflows for various tasks, including Docker image building, deployment, and more.
-
-- [Docker Desktop Download](https://www.docker.com/products/docker-desktop)
-  - Download Docker Desktop for Windows and macOS to build and run containers locally.
-
----
-
-This page provides important resources related to my project Docker, GitHub Actions, Angular, DockerHub, and testing for this project. 
-
+  - A marketplace for GitHub Actions that can be integrated into workflows fo

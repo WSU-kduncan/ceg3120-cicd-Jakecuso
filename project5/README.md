@@ -2,6 +2,29 @@
 
 This document provides the steps for **generating tags**, **viewing tags**, and **pushing tags** in my Git repository. Tags are essential for versioning and triggering your CI/CD pipelines.
 
+# Continuous Deployment Project Overview
+
+## Project Goal
+The goal of this project is to implement a full Continuous Deployment (CD) pipeline for an Angular application using Docker, DockerHub, GitHub Actions, and an AWS EC2 instance.  
+Changes pushed to GitHub and DockerHub automatically trigger an update to the live running application on the EC2 server without manual intervention.
+
+## Tools and Roles
+- **Docker**: Containerizes the Angular application.
+- **DockerHub**: Stores and distributes the built container images.
+- **GitHub Actions**: Automates building and pushing container images to DockerHub when new tags are pushed.
+- **AWS EC2 Instance**: Hosts the running container serving the Angular application.
+- **adnanh's Webhook**: Listens for payloads and triggers the container refresh automatically on the EC2 instance.
+- **Systemd (Linux)**: Manages the webhook as a service so that it starts on boot and stays alive.
+
+## Project Diagram
+
+
+---
+
+## Known Issues (If Any)
+All parts of the project function correctly at the time of submission. No known issues at this time.
+
+
 ---
 
 ## 1) **Generating Tags**
