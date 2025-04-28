@@ -18,7 +18,7 @@ Changes pushed to GitHub and DockerHub automatically trigger an update to the li
 
 ## Project Diagram
 
-
+![diagram](images/dia.png)
 ---
 
 ## Known Issues (If Any)
