@@ -228,6 +228,7 @@ By following these steps, I can **test the workflow** that builds and pushes the
 This document explains how my **CI/CD workflow** handles **semantic versioning** for Docker images and automates the process of building and pushing them to DockerHub. The workflow will be triggered by a tag push and will apply the appropriate version tags to my Docker image, ensuring a smooth **continuous deployment** process.
 
 Tags are an essential part of version control in Git and are used extensively in **Continuous Deployment (CD)** workflows. By generating, viewing, and pushing tags, I can trigger automated processes and keep track of versions in my project. 
+---
 
 # Part 2 Continuous Deployment (CD)
 
@@ -393,3 +394,86 @@ Configured webhook as a system service to automatically start on server reboot.
 ![systemctl status showing webhook active and running](images/statuswebhook.png)
 
 ---
+
+
+## **(2.6) Configuring DockerHub to Send Payloads
+
+**Justification for selecting DockerHub:**
+- I chose DockerHub as the payload sender because my deployment depends on automatically pulling updated container images when a new build is pushed.
+- DockerHub allows direct webhook triggers when images are updated, making it ideal for seamless container refresh workflows.
+
+**How to enable webhook sending on DockerHub:**
+- Logged into DockerHub
+- Opened my repository (jakecuso/mancuso-ceg3120)
+- Navigated to the **Webhooks** tab
+- Created a webhook with the following URL:
+  - `http://34.227.223.202:9000/hooks/deploy-app`
+- Named the webhook `EC2 Deploy`
+- Saved the webhook configuration
+
+**Triggers:**
+- The webhook triggers when a new image tagged `latest` is pushed to the DockerHub repository.
+
+**Screenshot of DockerHub Webhook Configuration:**  
+![DockerHub Webhook Configured](images/dockerhubhook.png)
+
+---
+
+## **(2.7) Verifying Payload Delivery and Webhook Triggering
+
+**How to verify a successful payload delivery:**
+- Ran `sudo journalctl -u webhook -f` on the EC2 instance to live-monitor webhook logs.
+- After pushing a new DockerHub image tagged `latest`, the webhook payload was received.
+- Webhook matched the hook ID (`deploy-app`) and triggered `refresh_container.sh`.
+
+**Logs showed:**
+- Receipt of a POST request
+- Matching of payload trigger rules
+- Execution of container refresh steps (stop, remove, pull, run)
+
+**Screenshot of Webhook Receiving and Triggering Script:**  
+![Webhook Triggered Successfully](images/triggerd.png)
+
+---
+
+## **(2.8) Configuring and Enabling Webhook Service on EC2
+
+**Summary of webhook.service file contents:**
+- Service located at `/etc/systemd/system/webhook.service`
+- Configured to:
+  - Start webhook automatically on EC2 boot
+  - Load `/home/ubuntu/deployment/hooks.json`
+  - Listen on port 9000
+  - Restart on failure
+
+**How to enable and start the webhook service:**
+- sudo systemctl daemon-reload
+- sudo systemctl enable webhook
+- sudo systemctl start webhook
+
+**How to verify webhook service is running:**
+- Ran `sudo systemctl status webhook`
+- Confirmed service status was **active (running)**.
+
+
+---
+
+## **(2.9) Final Deployment Folder and Script Links
+
+**Deployment folder contains:**
+- `refresh_container.sh` → Bash script that refreshes the container
+- `hooks.json` → Webhook definition rules
+- `webhook.service` → Service file for auto-start on reboot
+
+**Location in GitHub Repository:**
+- `/deployment/refresh_container.sh`
+- `/deployment/hooks.json`
+- `/deployment/webhook.service`
+
+This satisfies the requirement to include all necessary scripts and configurations for Continuous Deployment.
+
+---
+
+# ✅ Conclusion
+
+This project successfully implemented a Continuous Deployment (CD) pipeline for an Angular application containerized with Docker. By leveraging DockerHub webhooks, the EC2 server is able to automatically pull and redeploy the latest image without manual intervention, ensuring the application stays updated reliably after every DockerHub push. Automation scripts and configuration files are organized and available in the GitHub repository under the `/deployment` folder.
