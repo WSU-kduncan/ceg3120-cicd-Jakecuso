@@ -1,0 +1,31 @@
+[
+  {
+    "id": "deploy-app",
+    "execute-command": "/home/ubuntu/deployment/refresh_container.sh",
+    "command-working-directory": "/home/ubuntu/deployment",
+    "trigger-rule": {
+      "and": [
+        {
+          "match": {
+            "type": "value",
+            "parameter": {
+              "source": "payload",
+              "name": "repository.repo_name"
+            },
+            "value": "jakecuso/mancuso-ceg3120"
+          }
+        },
+        {
+          "match": {
+            "type": "value",
+            "parameter": {
+              "source": "payload",
+              "name": "push_data.tag"
+            },
+            "value": "latest"
+          }
+        }
+      ]
+    }
+  }
+]
