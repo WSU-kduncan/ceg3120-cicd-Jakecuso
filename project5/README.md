@@ -280,6 +280,44 @@ Installed Docker using the following commands:
 - sudo systemctl start docker
 - sudo systemctl enable docker
 
+### Additional Dependencies Based on EC2 Instance OS
+
+Since the EC2 instance was running Ubuntu Server 22.04 LTS (x86),  
+the main additional dependency needed for Docker installation was ensuring the system packages were up-to-date.
+
+Commands run:
+
+```bash
+- sudo apt update
+- sudo apt install -y docker.io
+```
+
+Ubuntu 22.04 includes support for systemd, so no further dependencies (such as manual systemd setup) were required.
+
+For running webhook as a service:
+- webhook was installed directly using the system package manager (apt).
+- No additional manual dependencies like Go runtime or build tools were required, because the apt package for webhook comes precompiled.
+
+Thus, the dependencies were limited to:
+- docker.io package
+- webhook package
+- standard Ubuntu system utilities (already pre-installed on AMI)
+
+### **After installing Docker on the EC2 instance, I confirmed that Docker was correctly installed and functioning by running the following:**
+
+- Verified Docker version:
+   ```
+   sudo docker --version
+  ```
+  - Output confirmed Docker was installed and showed the installed version.
+   
+- Ran a test container:
+```
+  sudo docker run hello-world
+  ```
+  - This command downloaded a test image and ran a container that printed a "Hello from Docker!" success message.
+  - Confirmed that containers could run properly on the EC2 instance.
+
 **Docker Hello World Screenshot:**  
 ![Docker Hello World](images/hellow.png)
 
