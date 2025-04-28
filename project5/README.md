@@ -264,6 +264,7 @@ Tags are an essential part of version control in Git and are used extensively in
   - App (TCP 4200) - Allowed from Anywhere (`0.0.0.0/0`)
   - Webhook (TCP 9000) - Allowed from Anywhere (`0.0.0.0/0`)
   - Reserved (TCP 4000) - Future use (mistake lol)
+  ![img](images/inbound.png)
 
 **Screenshot of AWS Instance Details :**  
 ![Instance Setup](images/instance.png)
@@ -540,33 +541,157 @@ The `refresh_container.sh` script is located in the `/deployment` folder of my G
 ---
 
 ## (2.5) Installing and Setting Up Webhook on EC2
+### How to Install Adnanh's Webhook to the EC2 Instance
 
-Installed the webhook server on the EC2 instance by first updating the package lists and then installing webhook.
+To install the webhook server on my EC2 instance running Ubuntu 22.04 LTS, I followed these steps:
 
-After installation, tested that webhook could manually run using the created hook definition.
+1. **Update the System Package Index**
+   - sudo apt update
 
-Created a deployment folder containing the following files:
-- refresh_container.sh : A bash script that stops, removes, pulls, and runs the Angular app container.
-- hooks.json : A configuration file that defines the rules for when webhook should trigger the refresh script.
-- webhook.service : A systemd service file to ensure webhook runs automatically when the EC2 instance starts.
+2. **Install Webhook Using Apt Package Manager**
+   - sudo apt install -y webhook
+![Webhook Installed and Manual Run](images/webhook.png)
 
-The hook definition:
-- Validates that the payload received is from the DockerHub repository jakecuso/mancuso-ceg3120.
-- Confirms that the tag pushed is latest.
-- If both validations pass, it triggers the refresh_container.sh script to update the running container.
+This installed the official webhook package from the Ubuntu repositories.  
 
-Configured webhook as a system service to automatically start on server reboot.
+No additional compilation or manual installation steps were required because Ubuntu 22.04 provides a prebuilt webhook binary through apt.
 
-**Screenshots for 2.5 Setup:**
-![webhook installation and running manually](images/webhook.png)
 
-![hooks.json file showing trigger rule setup](images/hooksjson.png)
+**Screenshot of Webhook Installation and Manual Run:**  
+
+---
+### How to Verify Successful Installation of Webhook & How to Verify that the Definition File (hooks.json) Was Loaded by Webhook
+
+
+After installing webhook using the apt package manager, I verified that the installation was successful by completing the following steps:
+
+1. **Checked the Webhook Version**
+   - Ran the command:
+   ```
+      webhook --version
+     ```
+   - Output displayed the installed webhook version (v2.8.0), confirming it was correctly installed on the system.
+
+2. **Manually Started Webhook with a Sample Hook File**
+   - Created a basic `hooks.json` file in the `/home/ubuntu/deployment/` folder.
+
+   - Started webhook manually by running:
+   ```
+      webhook -hooks /home/ubuntu/deployment/hooks.json -port 9000 -verbrose
+     ```
 
 ![first manual webhook test showing listener](images/1sttest.png)
+   - Webhook output indicated it was:
+     - Loading the hooks file successfully.
+     - Listening for incoming HTTP requests on port 9000.
+
+3. **Monitored the Webhook Logs**
+   - Used:
+     - sudo journalctl -u webhook -f
+   - Verified that no errors occurred and that webhook responded when accessed externally or when payloads were sent.
+
+---
+### Summary of the Webhook Definition File (hooks.json)
+
+The `hooks.json` file defines how webhook should respond when it receives an HTTP payload.  
+It contains the following important fields:
+
+- **id**: `"deploy-app"`  
+  - Unique identifier for the hook.
+  - Webhook listens at the endpoint `/hooks/deploy-app`.
+
+- **execute-command**: `"/home/ubuntu/deployment/refresh_container.sh"`  
+  - Specifies the bash script that webhook should run when the trigger conditions are met.
+
+- **command-working-directory**: `"/home/ubuntu/deployment"`  
+  - Sets the working directory for when the command is executed.
+
+- **trigger-rule**:  
+  - Contains rules that must match the incoming payload for the hook to execute.
+  - Specifically:
+    - Verifies that the `repository.repo_name` field in the payload matches `jakecuso/mancuso-ceg3120`.
+    - Verifies that the `push_data.tag` field is `latest`.
+
+If both trigger conditions are true, webhook will automatically run the `refresh_container.sh` script to pull the new image and restart the container.
+
+
+**Screenshot Showing Hooks.json Definition:**  
+![hooks.json file showing trigger rule setup](images/hooksjson.png)
+
+---
+
+
+### How to Verify Webhook is Receiving Payloads That Trigger It
+
+After setting up the webhook listener and linking DockerHub, I verified webhook was receiving and responding to payloads by:
+
+1. **Live Monitoring Webhook Logs**
+   - Ran:
+     - sudo journalctl -u webhook -f
+   - This command streamed live log output from the webhook systemd service.
+
+2. **Triggering a Payload Event**
+   - Pushed an updated Docker image tagged `latest` to my DockerHub repository (jakecuso/mancuso-ceg3120).
+![Webhook Triggered Successfully](images/triggerd.png)
+3. **Observing Webhook Behavior in Logs**
+   - Upon pushing the update, the webhook logs showed:
+     - Receipt of an HTTP `POST` request to `/hooks/deploy-app`
+     - Matching of trigger conditions defined in `hooks.json`
+     - Execution of the `refresh_container.sh` script
+   - Key messages in logs:
+     - `[webhook] 200 | matched hook: deploy-app`
+     - `[webhook] executing command /home/ubuntu/deployment/refresh_container.sh`
+
+This confirmed that:
+- The webhook listener was properly active on port 9000.
+- Payloads from DockerHub were successfully reaching the EC2 instance and triggering actions.
+
+---
+
+### How to Monitor Logs from the Running Webhook
+
+To continuously monitor the webhook and catch real-time incoming payloads:
+
+- Ran:
+  - sudo journalctl -u webhook -f
+
+This displayed:
+- Incoming connections
+- Successful hook matches
+- Triggered executions of the refresh script
+- Any error messages if payloads were invalid
+
+Monitoring these logs was crucial during testing to ensure the system was functioning automatically after each DockerHub push.
+
+---
+
+### What to Look for in Docker Process Views
+
+After webhook triggered the container refresh, I validated the correct container behavior using Docker commands:
+
+- Listed running containers with:
+  - sudo docker ps
+
+What to look for:
+- A running container named `angular_app`
+- The correct image `jakecuso/mancuso-ceg3120:latest`
+- Ports mapping `0.0.0.0:4200->4200/tcp`
+- Up-time showing that a **new container** had been recently created (timestamp resets)
+
+This confirmed that:
+- The old container was successfully stopped and removed
+- A new container was pulled and started automatically
+- The updated application was now serving on port 4200
+
+
+**Screenshots for 2.5 Setup:**
+
+
+
 
 ![webhook.service file content](images/webservice.png)
 
-![systemctl status showing webhook active and running](images/statuswebhook.png)
+
 
 ---
 
