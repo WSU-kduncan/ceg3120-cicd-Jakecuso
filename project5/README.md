@@ -325,24 +325,131 @@ Thus, the dependencies were limited to:
 
 ## **(2.3)** Pulling the Angular Application Container
 
-Pulled the application image from DockerHub:
-- sudo docker pull jakecuso/mancuso-ceg3120:latest
+### How to Pull a Container Image from DockerHub Repository
 
+To pull a container image from my DockerHub repository to the EC2 instance, I ran the following command:
+```
+- sudo docker pull jakecuso/mancuso-ceg3120:latest
+```
+This command:
+- Contacts DockerHub servers
+- Downloads the image tagged as `latest` from the `jakecuso/mancuso-ceg3120` repository
+- Stores the image locally on the EC2 instance for use in creating containers
+
+After pulling, the image could be seen by running:
+```
+sudo docker images
+```
+This confirmed the image was successfully pulled and ready for deployment.
+
+Pulled the application image from DockerHub using: 
+```
+sudo docker pull jakecuso/mancuso-ceg3120:latest
+```
 **Pull Screenshot:**  
 ![Docker Pull](images/dockpull.png)
 
+
+
+After pulling the image from DockerHub, I ran a container using the following command:
+```
+sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
+```
+Explanation of the command:
+- `docker run` starts a new container.
+- `-d` flag runs the container **detached** (in the background).
+- `-i` flag keeps STDIN open so the container can interact if needed.
+- `-t` flag allocates a pseudo-TTY terminal for the container.
+
+The `-p 4200:4200` part maps port 4200 inside the container to port 4200 on the EC2 server, making the Angular app accessible externally.
+
 ---
 
-## **(2.3)** Running the Application Container
+### Differences Between `-it` and `-d` Flags and Recommendation
 
-Started the container and mapped port 4200:
-- sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
+- **`-it` Flags**:
+  - Interactive mode.
+  - Useful when you want to attach to a container and work inside it (ex: bash into the container).
+  - Keeps terminal open for user input.
 
-**Mapping 4200 Screenshot:**  
-![Run Container](images/run.png)  
-**Validate Screenshot:**  
-![Container Running Check](images/runcheck.png)
+- **`-d` Flag**:
+  - Detached mode.
+  - Runs the container in the background.
+  - Good for production applications where you don't need to manually interact with the container.
 
+**Recommendation After Testing:**
+- For deployment after testing, I recommend **using the `-d` flag** so that the Angular application container runs continuously in the background without requiring an active SSH session.
+---
+
+
+### How to Verify that the Container is Successfully Serving the Angular Application
+
+**Validation from the Container Side:**
+- Accessed the container interactively by running:
+```
+  sudo docker exec -it angular_app bash
+  ```
+- Inside the container, ran:
+```
+   curl http://localhost:4200
+  ```
+  
+- Received an HTML response, confirming that the Angular application server was running internally inside the container.
+
+---
+
+**Validation from the Host (EC2) Side:**
+- From the EC2 instance (not inside the container), ran:
+```
+   curl http://localhost:4200
+  ```
+- Also received the expected HTML content.
+
+**Curl EC2 Screenshot:**  
+![Docker curl](images/curl.png)
+- Confirmed that port mapping (`-p 4200:4200`) was successful and the app was accessible from the EC2 host machine.
+
+---
+
+**Validation from an External Connection (Physical System):**
+- Opened a web browser on my laptop.
+- Navigated to:
+  - http://34.227.223.202:4200
+- Successfully loaded the Angular application page.
+- Confirmed that the EC2 firewall (Security Group) allowed inbound traffic on TCP port 4200.
+
+**Screenshot of External Validation (Browser Loading App):**  
+![Docker Pull](images/safari.png)
+
+also these are good commands to use 
+![Docker Pull](images/run.png)
+![Docker Pull](images/runcheck.png)
+
+### Steps to Manually Refresh the Container Application if a New Image is Available on DockerHub
+
+If a new version of the container image is pushed to DockerHub, the container running on the EC2 instance can be manually refreshed with the following steps:
+
+1. **Stop the Currently Running Container**
+   - sudo docker stop angular_app
+
+2. **Remove the Stopped Container**
+   - sudo docker rm angular_app
+
+3. **Pull the Latest Image from DockerHub**
+   - sudo docker pull jakecuso/mancuso-ceg3120:latest
+
+4. **Run a New Container Using the Latest Image**
+   - sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
+
+---
+
+These steps manually:
+- Stop the old version of the application,
+- Remove the old container instance,
+- Pull the updated image from DockerHub,
+- Start a fresh container serving the newest application version.
+
+This manual process is automated through the `refresh_container.sh` script during webhook-triggered automatic deployment.
 ---
 ## **(2.4)** Crafting the Bash Script for Deployment Refresh
 
