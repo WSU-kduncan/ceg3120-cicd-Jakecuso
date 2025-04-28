@@ -363,3 +363,33 @@ Since my EC2 user did not have direct access to the Docker daemon, I needed to a
 ![Refresh Script with Sudo](images/refreshsudo.png)
 
 ---
+## (2.5) Installing and Setting Up Webhook on EC2
+
+Installed the webhook server on the EC2 instance by first updating the package lists and then installing webhook.
+
+After installation, tested that webhook could manually run using the created hook definition.
+
+Created a deployment folder containing the following files:
+- refresh_container.sh : A bash script that stops, removes, pulls, and runs the Angular app container.
+- hooks.json : A configuration file that defines the rules for when webhook should trigger the refresh script.
+- webhook.service : A systemd service file to ensure webhook runs automatically when the EC2 instance starts.
+
+The hook definition:
+- Validates that the payload received is from the DockerHub repository jakecuso/mancuso-ceg3120.
+- Confirms that the tag pushed is latest.
+- If both validations pass, it triggers the refresh_container.sh script to update the running container.
+
+Configured webhook as a system service to automatically start on server reboot.
+
+**Screenshots for 2.5 Setup:**
+![webhook installation and running manually](images/webhook.png)
+
+![hooks.json file showing trigger rule setup](images/hooksjson.png)
+
+![first manual webhook test showing listener](images/1sttest.png)
+
+![webhook.service file content](images/webservice.png)
+
+![systemctl status showing webhook active and running](images/statuswebhook.png)
+
+---
