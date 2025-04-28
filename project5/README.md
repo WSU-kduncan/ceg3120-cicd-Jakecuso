@@ -790,3 +790,7 @@ This file defines the trigger rules and specifies the command (`refresh_containe
 # ✅ Conclusion
 
 This project successfully implemented a Continuous Deployment (CD) pipeline for an Angular application containerized with Docker. By leveraging DockerHub webhooks, the EC2 server is able to automatically pull and redeploy the latest image without manual intervention, ensuring the application stays updated reliably after every DockerHub push. Automation scripts and configuration files are organized and available in the GitHub repository under the `/deployment` folder.
+
+---
+## **Resources**
+###### For additional information, guides, and references related to Docker, GitHub Actions, Angular, and more, check out the [Resources](README-RESOURCES.md).

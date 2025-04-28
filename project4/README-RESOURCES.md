@@ -54,6 +54,18 @@
 - [Testing Angular Applications](https://angular.io/guide/testing)
   - Official guide to testing Angular applications, including unit tests and integration tests.
 
+  - [CI/CD with GitHub Actions (DigitalOcean Tutorials)](https://www.digitalocean.com/community/tutorials)
+  - Practical guides for setting up Continuous Integration and Deployment pipelines.
+
+
+## Webhook and Deployment
+
+- [adnanh/webhook GitHub Repository](https://github.com/adnanh/webhook)
+  - Lightweight webhook server used for triggering scripts upon payload delivery.
+
+
+
+
 ---
 ## ReadME.md Formatting 
 This projects ReadMe Files & the #dockerfile comments wwhere as developed with insights from ChatGPT (OpenAI, 2022 Training Data) and my personal LLM assistant -v2026(Local deployment only / hosted on My MAC Cluster called `ClusterFawk`).
