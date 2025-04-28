@@ -228,3 +228,80 @@ By following these steps, I can **test the workflow** that builds and pushes the
 This document explains how my **CI/CD workflow** handles **semantic versioning** for Docker images and automates the process of building and pushing them to DockerHub. The workflow will be triggered by a tag push and will apply the appropriate version tags to my Docker image, ensuring a smooth **continuous deployment** process.
 
 Tags are an essential part of version control in Git and are used extensively in **Continuous Deployment (CD)** workflows. By generating, viewing, and pushing tags, I can trigger automated processes and keep track of versions in my project. 
+
+# Part 2 Continuous Deployment (CD)
+
+## Tasks
+
+- **(2.1)** Note your EC2 instance details
+
+- **(2.2)** Install Docker to your EC2 instance
+
+ - **(2.3)** Test that your EC2 instance can run a container from your DockerHub repository image
+ - **(2.4)** Craft a bash script that will:
+   - stop and remove the formerly running container
+   - pull the latest tagged image from your DockerHub repository
+   - run a new container process with the pull'ed image
+   - ADD bash script to folder named deployment in your GitHub repository
+- **(2.5)** Install adnanh's webhook to your EC2 instance
+- **(2.6)** Create a configuration file - a hook definition - for webhook to load when ran. The hook definition should:
+   - Trigger your bash script to run when a payload is received
+    - Validate that the payload came from a trusted source via a shared secret or by validating payload is from DockerHub or GitHub
+   - ADD hook definition to folder named deployment in your GitHub repository
+- **(2.7)** Configure DockerHub or GitHub to send a Webhook payload to your EC2 instance when an appropriate event occurs
+ -  **(2.8)** Set up a service file such that the webhook is set to start listening as soon as the EC2 instance is on. Enable this service and verify it triggers your bash script to run when a message is received
+-  **(2.9)** ADD webhook service file to folder named deployment in your GitHub repository
+
+## **(2.1)** EC2 Instance Details
+
+- **AMI**: Ubuntu Server 22.04 LTS (x86)
+- **Instance Type**: `t2.medium`
+- **Storage**: 30 GB
+- **Key Pair**: `proj3.pem` (used the same KP from p3 bc lazy!)
+- **Security Group Rules**:
+  - SSH (TCP 22) - Allowed from My IP
+  - App (TCP 4200) - Allowed from Anywhere (`0.0.0.0/0`)
+  - Webhook (TCP 9000) - Allowed from Anywhere (`0.0.0.0/0`)
+  - Reserved (TCP 4000) - Future use (mistake lol)
+
+**Screenshot of AWS Instance Details :**  
+![Instance Setup](images/instance.png)
+
+---
+**SSH Login Screenshot:**  
+![SSH Login](images/login.png) 
+
+## **(2.2)** Docker Setup on EC2 Instance 
+
+Installed Docker using the following commands:
+- sudo apt update
+- sudo apt install -y docker.io
+- sudo systemctl start docker
+- sudo systemctl enable docker
+
+**Docker Hello World Screenshot:**  
+![Docker Hello World](images/hellow.png)
+
+---
+
+## **(2.3)** Pulling the Angular Application Container
+
+Pulled the application image from DockerHub:
+- sudo docker pull jakecuso/mancuso-ceg3120:latest
+
+**Pull Screenshot:**  
+![Docker Pull](images/dockpull.png)
+
+---
+
+## **(2.3)** Running the Application Container
+
+Started the container and mapped port 4200:
+- sudo docker run -dit --name angular_app -p 4200:4200 jakecuso/mancuso-ceg3120:latest
+
+**Mapping 4200 Screenshot:**  
+![Run Container](images/run.png)  
+**Validate Screenshot:**  
+![Container Running Check](images/runcheck.png)
+
+---
