@@ -816,4 +816,4 @@ This project successfully implemented a Continuous Deployment (CD) pipeline for 
 
 ---
 ## **Resources**
-###### For additional information, guides, and references related to Docker, GitHub Actions, Angular, and more, check out the [Resources](README-RESOURCES.md).
+###### For additional information, guides, and references related to Docker, GitHub Actions, Angular, and more, check out the [Resources](README-RESOURCES.md). That I used to make this Project :)
