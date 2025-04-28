@@ -542,6 +542,7 @@ The `refresh_container.sh` script is located in the `/deployment` folder of my G
 
 ## (2.5) Installing and Setting Up Webhook on EC2
 ### How to Install Adnanh's Webhook to the EC2 Instance
+https://github.com/adnanh/webhook
 
 To install the webhook server on my EC2 instance running Ubuntu 22.04 LTS, I followed these steps:
 
@@ -684,6 +685,13 @@ This confirmed that:
 - The updated application was now serving on port 4200
 
 
+### Link to Definition File in Repository
+
+The `hooks.json` webhook definition file is located inside the `/deployment` folder in my GitHub repository:
+
+- [hooks.json](https://github.com/WSU-kduncan/ceg3120-cicd-Jakecuso/blob/main/project5/deployment/hooks.json)
+This file defines the trigger rules and specifies the command (`refresh_container.sh`) that should execute when a valid webhook payload is received from DockerHub.
+
 **Screenshots for 2.5 Setup:**
 
 
@@ -698,81 +706,86 @@ This confirmed that:
 
 ## **(2.6) Configuring DockerHub to Send Payloads
 
-**Justification for selecting DockerHub:**
-- I chose DockerHub as the payload sender because my deployment depends on automatically pulling updated container images when a new build is pushed.
-- DockerHub allows direct webhook triggers when images are updated, making it ideal for seamless container refresh workflows.
+## (2.6) Configuring DockerHub to Send Payloads
 
-**How to enable webhook sending on DockerHub:**
-- Logged into DockerHub
-- Opened my repository (jakecuso/mancuso-ceg3120)
-- Navigated to the **Webhooks** tab
-- Created a webhook with the following URL:
+**Justification for Selecting DockerHub as Payload Sender:**
+- I chose DockerHub because it can automatically send webhook payloads when a new container image is pushed, allowing seamless deployment updates.
+
+**How to Enable Payload Sending:**
+- Logged into DockerHub, opened my repository (`jakecuso/mancuso-ceg3120`), navigated to the **Webhooks** tab.
+- Created a webhook with URL:
   - `http://34.227.223.202:9000/hooks/deploy-app`
-- Named the webhook `EC2 Deploy`
-- Saved the webhook configuration
-
-**Triggers:**
-- The webhook triggers when a new image tagged `latest` is pushed to the DockerHub repository.
+- Named the webhook `EC2 Deploy` and saved.
 
 **Screenshot of DockerHub Webhook Configuration:**  
 ![DockerHub Webhook Configured](images/dockerhubhook.png)
 
 ---
 
-## **(2.7) Verifying Payload Delivery and Webhook Triggering
+### What Triggers Send a Payload to the EC2 Webhook Listener
 
-**How to verify a successful payload delivery:**
-- Ran `sudo journalctl -u webhook -f` on the EC2 instance to live-monitor webhook logs.
-- After pushing a new DockerHub image tagged `latest`, the webhook payload was received.
-- Webhook matched the hook ID (`deploy-app`) and triggered `refresh_container.sh`.
-
-**Logs showed:**
-- Receipt of a POST request
-- Matching of payload trigger rules
-- Execution of container refresh steps (stop, remove, pull, run)
-
-**Screenshot of Webhook Receiving and Triggering Script:**  
-![Webhook Triggered Successfully](images/triggerd.png)
+- A webhook payload is triggered when a Docker image tagged as `latest` is pushed to the `jakecuso/mancuso-ceg3120` repository.
+- DockerHub sends a POST request to `http://34.227.223.202:9000/hooks/deploy-app`.
+- Webhook matches the repository name and tag in `hooks.json` and triggers the `refresh_container.sh` script to refresh the running container.
 
 ---
 
-## **(2.8) Configuring and Enabling Webhook Service on EC2
+### How to Verify a Successful Payload Delivery
+
+1. **Monitor Webhook Logs**
+   - Used `sudo journalctl -u webhook -f` to watch for incoming POST payloads.
+
+2. **Push an Updated Image**
+   - Built and pushed an updated `latest` Docker image to DockerHub.
+
+3. **Check Webhook Logs**
+   - Verified logs showed:
+     - `[webhook] matched hook: deploy-app`
+     - `[webhook] executing command /home/ubuntu/deployment/refresh_container.sh`
+
+4. **Check Docker Containers**
+   - Confirmed a new container instance was running (`sudo docker ps`).
+
+5. **Access Application Externally**
+   - Opened `http://34.227.223.202:4200` in a web browser and verified the application loaded.
+
+**Screenshot of Webhook Receiving Payload and Triggering Script:**  
+![Webhook Triggered Successfully](images/triggerd.png)
+---
+
+##  **(2.7)** Verifying Payload Delivery and Webhook Triggering
 
 **Summary of webhook.service file contents:**
-- Service located at `/etc/systemd/system/webhook.service`
+- Service file located at `/etc/systemd/system/webhook.service`
 - Configured to:
-  - Start webhook automatically on EC2 boot
-  - Load `/home/ubuntu/deployment/hooks.json`
-  - Listen on port 9000
-  - Restart on failure
+  - Start webhook automatically when the EC2 instance boots
+  - Load the hooks.json file from `/home/ubuntu/deployment/`
+  - Listen for HTTP POST requests on port 9000
+  - Restart automatically if it fails
+
+---
 
 **How to enable and start the webhook service:**
 - sudo systemctl daemon-reload
 - sudo systemctl enable webhook
 - sudo systemctl start webhook
 
-**How to verify webhook service is running:**
-- Ran `sudo systemctl status webhook`
-- Confirmed service status was **active (running)**.
+---
 
+**How to verify webhook service is capturing payloads and triggering bash script:**
+- Ran `sudo journalctl -u webhook -f` to monitor logs live
+- Pushed a new Docker image to DockerHub tagged `latest`
+- Observed webhook logs showing:
+  - Receipt of POST payload
+  - Matching hook `deploy-app`
+  - Execution of `/home/ubuntu/deployment/refresh_container.sh`
+- Ran `sudo docker ps` to verify a refreshed container was running
+- Accessed `http://34.227.223.202:4200` externally to verify the updated app
 
 ---
 
-## **(2.9) Final Deployment Folder and Script Links
-
-**Deployment folder contains:**
-- `refresh_container.sh` → Bash script that refreshes the container
-- `hooks.json` → Webhook definition rules
-- `webhook.service` → Service file for auto-start on reboot
-
-**Location in GitHub Repository:**
-- `/deployment/refresh_container.sh`
-- `/deployment/hooks.json`
-- `/deployment/webhook.service`
-
-This satisfies the requirement to include all necessary scripts and configurations for Continuous Deployment.
-
----
+**Link to webhook.service file in repository:**
+- [webhook.service ](https://github.com/WSU-kduncan/ceg3120-cicd-Jakecuso/blob/main/project5/deployment/webhook.service)
 
 # ✅ Conclusion
 
